@@ -1,5 +1,8 @@
 # KPAY Quiz
 
+# How to run 
+`env PORT=8000 go run ./ `
+
 create an api for merchant seller and selling report.
 
 ## Requirement
