@@ -6,14 +6,18 @@ import (
 	"kpay-quiz/model"
 	"net/http"
 	"os"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 )
+
+var mutex sync.Mutex
 
 type Server struct {
 	Register        RegisterService
 	Merchant        MerchantService
 	MerchantProduct MerchantProductService
+	Buy             BuyService
 }
 
 type RegisterJSON struct {
@@ -29,6 +33,8 @@ type RegisterJSON struct {
 */
 
 func (s *Server) RegisterMerchant(c *gin.Context) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	var registerJSON RegisterJSON
 	err := c.ShouldBindJSON(&registerJSON)
 	if err != nil {
@@ -55,6 +61,9 @@ func (s *Server) RegisterMerchant(c *gin.Context) {
 }
 
 func (s *Server) MerchantInformation(c *gin.Context) {
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	id := c.Param("id")
 	merchant, err := s.Merchant.Information(id)
 
@@ -68,7 +77,11 @@ func (s *Server) MerchantInformation(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, merchant)
+	data := map[string]interface{}{
+		"data": merchant,
+	}
+
+	c.JSON(http.StatusCreated, data)
 }
 
 type UpdateMerchantJSON struct {
@@ -77,6 +90,9 @@ type UpdateMerchantJSON struct {
 }
 
 func (s *Server) UpdateMerchant(c *gin.Context) {
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	id := c.Param("id")
 	var updateMerchantJSON UpdateMerchantJSON
 	err := c.ShouldBindJSON(&updateMerchantJSON)
@@ -106,6 +122,9 @@ func (s *Server) UpdateMerchant(c *gin.Context) {
 }
 
 func (s *Server) AddProduct(c *gin.Context) {
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	id := c.Param("id")
 	var product model.Product
 	err := c.ShouldBindJSON(&product)
@@ -135,6 +154,9 @@ func (s *Server) AddProduct(c *gin.Context) {
 }
 
 func (s *Server) ListAllProducts(c *gin.Context) {
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	id := c.Param("id")
 	products, err := s.MerchantProduct.All(id)
 
@@ -153,6 +175,8 @@ func (s *Server) ListAllProducts(c *gin.Context) {
 }
 
 func (s *Server) UpdateProduct(c *gin.Context) {
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	var product model.Product
 	merchectId := c.Param("id")
@@ -186,6 +210,8 @@ func (s *Server) UpdateProduct(c *gin.Context) {
 }
 
 func (s *Server) RemoveProduct(c *gin.Context) {
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	merchectId := c.Param("id")
 	productId := c.Param("product_id")
@@ -208,11 +234,47 @@ func (s *Server) RemoveProduct(c *gin.Context) {
 }
 
 func (s *Server) SellReports(c *gin.Context) {
+	mutex.Lock()
+	defer mutex.Unlock()
 
 }
 
-func (s *Server) BuyProduct(c *gin.Context) {
+type BuyProductRequest struct {
+	MerchectId       string `bson:"merchect_id" json:"merchect_id"`
+	ProductId        string `bson:"product_id" json:"product_id"`
+	BuyAmountProduct int    `bson:"buy_amount_product" json:"buy_amount_product"`
+}
 
+func (s *Server) BuyProduct(c *gin.Context) {
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	var buyProductRequest BuyProductRequest
+	err := c.ShouldBindJSON(&buyProductRequest)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"object":  "error",
+			"message": fmt.Sprintf("json: wrong params: %s", err),
+		})
+		return
+	}
+
+	merchent, err := s.Buy.Product(&buyProductRequest)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"object":  "error",
+			"message": fmt.Sprintf("%s", err),
+		})
+		return
+	}
+
+	printLog(merchent)
+
+	c.JSON(http.StatusCreated, gin.H{
+		"status": "success",
+	})
 }
 
 func printLog(n interface{}) {

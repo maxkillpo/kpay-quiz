@@ -31,6 +31,9 @@ func main() {
 		MerchantProduct: &service.MerchantProductServiceImprement{
 			DB: &daos,
 		},
+		Buy: &service.BuyServiceImprement{
+			DB: &daos,
+		},
 	}
 
 	r := router.Setup(s)

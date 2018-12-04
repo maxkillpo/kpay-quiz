@@ -17,7 +17,7 @@ type Merchant struct {
 	Password    string        `bson:"password" json:"password"`
 	BankAccount BankAccount   `bson:"bank_account" json:"bank_account"`
 	Products    []Product     `bson:"products" json:"products"`
-	History     []History
+	History     []History     `bson:"history" json:"history"`
 }
 
 type BankAccount struct {
@@ -37,5 +37,5 @@ type History struct {
 	ID          bson.ObjectId `bson:"_id" json:"id"`
 	Amount      int           `bson:"amount" json:"amount"`
 	ProductName string        `bson:"product_name" json:"product_name"`
-	DateBuy     string        `bson:"date_buy" json:"date_buy"`
+	Date        string        `bson:"date" json:"date"`
 }
