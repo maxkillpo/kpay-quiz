@@ -25,13 +25,6 @@ type RegisterJSON struct {
 	BankAccountNumber string `bson:"bank_account_number" json:"bank_account_number"`
 }
 
-/*
-{
-	"name" : "qefqefqef",
-	"bank_account_number" : "111-222-444-5-5-552"
-}
-*/
-
 func (s *Server) RegisterMerchant(c *gin.Context) {
 	mutex.Lock()
 	defer mutex.Unlock()
