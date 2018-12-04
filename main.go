@@ -7,32 +7,20 @@ import (
 	"os"
 )
 
-var (
-	config = Config{}
-	daos   = store.DAO{}
-)
-
-func init() {
-	config.Read()
-	daos.Server = config.Server
-	daos.Database = config.Database
-	daos.Connect()
-}
-
 func main() {
 
 	s := &service.Server{
 		Register: &service.RegisterServiceImprement{
-			DB: &daos,
+			DB: &store.DAOS,
 		},
 		Merchant: &service.MerchantServiceImprement{
-			DB: &daos,
+			DB: &store.DAOS,
 		},
 		MerchantProduct: &service.MerchantProductServiceImprement{
-			DB: &daos,
+			DB: &store.DAOS,
 		},
 		Buy: &service.BuyServiceImprement{
-			DB: &daos,
+			DB: &store.DAOS,
 		},
 	}
 
