@@ -1,9 +1,10 @@
 package store
 
 import (
+	"kpay-quiz/model"
 	"log"
 
-	mgo "github.com/globalsign/mgo"
+	"github.com/globalsign/mgo"
 )
 
 type DAO struct {
@@ -23,6 +24,6 @@ func (d *DAO) Connect() {
 	db = session.DB(d.Database)
 }
 
-func (d *DAO) Insert(product Product) error {
+func (d *DAO) Insert(product model.Product) error {
 	return db.C(COLLECTION).Insert(&product)
 }

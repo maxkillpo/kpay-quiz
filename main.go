@@ -1,7 +1,10 @@
 package main
 
 import (
+	"kpay-quiz/router"
+	"kpay-quiz/service"
 	"kpay-quiz/store"
+	"os"
 )
 
 var (
@@ -18,12 +21,21 @@ func init() {
 
 func main() {
 
-	o := store.Product{
-		Id:     "1",
-		Name:   "Max",
-		Detail: "AAAA",
-		Price:  12,
+	// o := store.Product{
+	// 	Id:     "1",
+	// 	Name:   "Max",
+	// 	Detail: "AAAA",
+	// 	Price:  12,
+	// }
+
+	// daos.Insert(o)
+
+	s := &service.Server{
+		Register: &service.RegisterServiceImprement{
+			DB: &daos,
+		},
 	}
 
-	daos.Insert(o)
+	r := router.Setup(s)
+	r.Run(":" + os.Getenv("PORT"))
 }

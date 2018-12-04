@@ -1,5 +1,3 @@
-# kpay-quiz
-
 # KPAY Quiz
 
 create an api for merchant seller and selling report.
