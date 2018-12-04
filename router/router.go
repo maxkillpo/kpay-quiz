@@ -30,17 +30,18 @@ func Setup(s *service.Server) *gin.Engine {
 func setupRouterMerchant(s *service.Server, g *gin.Engine) {
 	merchant := g.Group("/merchant")
 	merchant.POST("/register", s.RegisterMerchant)
-	// merchant.GET("/:id", s.MerchantInformation)
-	// merchant.POST("/id", s.UpdateMerchant)
-	// merchant.GET("/:id/products", s.ListAllProducts)
-	// merchant.POST("/:id/product", s.AddProduct)
-	// merchant.POST("/:id/product/:product_id", s.UpdateProduct)
-	// merchant.DELETE("/:id/product/:product_id", s.RemoveProduct)
-	// merchant.POST("/:id/report", s.SellReports)
-	// merchant.POST("/:id/report", s.SellReports)
+	merchant.GET("/information/:id", s.MerchantInformation)
+	merchant.POST("/update/:id", s.UpdateMerchant)
+	product := merchant.Group("/product")
+	product.GET("/:id/products", s.ListAllProducts)
+	product.POST("/:id/product", s.AddProduct)
+	product.POST("/:id/product/:product_id", s.UpdateProduct)
+	product.DELETE("/:id/product/:product_id", s.RemoveProduct)
+	report := merchant.Group("/report")
+	report.POST("/:id/report", s.SellReports)
 }
 
 func setupRouterBuy(s *service.Server, g *gin.Engine) {
-	// buy := g.Group("/buy")
-	// buy.POST("/product",s.BuyProduct)
+	buy := g.Group("/buy")
+	buy.POST("/product", s.BuyProduct)
 }

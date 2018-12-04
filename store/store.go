@@ -4,6 +4,8 @@ import (
 	"kpay-quiz/model"
 	"log"
 
+	"github.com/globalsign/mgo/bson"
+
 	"github.com/globalsign/mgo"
 )
 
@@ -24,6 +26,11 @@ func (d *DAO) Connect() {
 	db = session.DB(d.Database)
 }
 
-func (d *DAO) Insert(product model.Product) error {
-	return db.C(COLLECTION).Insert(&product)
+func (d *DAO) InsertMerchant(any interface{}) error {
+	return db.C(COLLECTION).Insert(&any)
+}
+
+func (d *DAO) FindId(id string) (*model.Merchant, error) {
+	var merchart model.Merchant
+	return &merchart, db.C(COLLECTION).FindId(bson.ObjectIdHex(id)).One(&merchart)
 }

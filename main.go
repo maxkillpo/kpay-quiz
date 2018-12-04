@@ -21,17 +21,11 @@ func init() {
 
 func main() {
 
-	// o := store.Product{
-	// 	Id:     "1",
-	// 	Name:   "Max",
-	// 	Detail: "AAAA",
-	// 	Price:  12,
-	// }
-
-	// daos.Insert(o)
-
 	s := &service.Server{
 		Register: &service.RegisterServiceImprement{
+			DB: &daos,
+		},
+		Merchant: &service.MerchantServiceImprement{
 			DB: &daos,
 		},
 	}
