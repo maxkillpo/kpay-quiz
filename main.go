@@ -28,6 +28,9 @@ func main() {
 		Merchant: &service.MerchantServiceImprement{
 			DB: &daos,
 		},
+		MerchantProduct: &service.MerchantProductServiceImprement{
+			DB: &daos,
+		},
 	}
 
 	r := router.Setup(s)

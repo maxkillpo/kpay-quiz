@@ -11,12 +11,13 @@ import "github.com/globalsign/mgo/bson"
 */
 
 type Merchant struct {
-	ID           bson.ObjectId `bson:"_id" json:"id"`
-	Name         string        `bson:"name" json:"name"`
-	Username     string        `bson:"username" json:"username"`
-	Password     string        `bson:"password" json:"password"`
-	BankAccounts []BankAccount `bson:"bank_account" json:"bank_account"`
-	Products     []Product     `bson:"products" json:"products"`
+	ID          bson.ObjectId `bson:"_id" json:"id"`
+	Name        string        `bson:"name" json:"name"`
+	Username    string        `bson:"username" json:"username"`
+	Password    string        `bson:"password" json:"password"`
+	BankAccount BankAccount   `bson:"bank_account" json:"bank_account"`
+	Products    []Product     `bson:"products" json:"products"`
+	History     []History
 }
 
 type BankAccount struct {
@@ -28,10 +29,13 @@ type BankAccount struct {
 type Product struct {
 	ID     bson.ObjectId `bson:"_id" json:"id"`
 	Name   string        `bson:"name" json:"name"`
-	Detail string        `bson:"detail" json:"detail"`
 	Price  float64       `bson:"price" json:"price"`
+	Amount int           `bson:"amount" json:"amount"`
 }
 
 type History struct {
-	ID bson.ObjectId `bson:"_id" json:"id"`
+	ID          bson.ObjectId `bson:"_id" json:"id"`
+	Amount      int           `bson:"amount" json:"amount"`
+	ProductName string        `bson:"product_name" json:"product_name"`
+	DateBuy     string        `bson:"date_buy" json:"date_buy"`
 }

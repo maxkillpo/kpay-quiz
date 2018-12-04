@@ -34,9 +34,9 @@ func setupRouterMerchant(s *service.Server, g *gin.Engine) {
 	merchant.POST("/update/:id", s.UpdateMerchant)
 	product := merchant.Group("/product")
 	product.GET("/:id/products", s.ListAllProducts)
-	product.POST("/:id/product", s.AddProduct)
-	product.POST("/:id/product/:product_id", s.UpdateProduct)
-	product.DELETE("/:id/product/:product_id", s.RemoveProduct)
+	product.POST("/:id", s.AddProduct)
+	product.POST("/:id/:product_id", s.UpdateProduct)
+	product.DELETE("/:id/:product_id", s.RemoveProduct)
 	report := merchant.Group("/report")
 	report.POST("/:id/report", s.SellReports)
 }

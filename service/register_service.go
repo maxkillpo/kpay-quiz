@@ -40,21 +40,17 @@ func (r *RegisterServiceImprement) Merchant(registerJSON *RegisterJSON) (*model.
 		password[i] = textForRandomPassword[rand.Intn(len(textForRandomPassword))]
 	}
 
-	createBankAccount := []model.BankAccount{}
-
-	createBankAccount = append(createBankAccount, model.BankAccount{
-		ID:            bson.NewObjectId(),
-		NumberAccount: registerJSON.BankAccountNumber,
-		Balance:       0.0,
-	})
-
 	merchant := model.Merchant{
-		ID:           bson.NewObjectId(),
-		Name:         registerJSON.Name,
-		Username:     string(username),
-		Password:     string(password),
-		BankAccounts: createBankAccount,
-		Products:     nil,
+		ID:       bson.NewObjectId(),
+		Name:     registerJSON.Name,
+		Username: string(username),
+		Password: string(password),
+		BankAccount: model.BankAccount{
+			ID:            bson.NewObjectId(),
+			NumberAccount: registerJSON.BankAccountNumber,
+			Balance:       0.0,
+		},
+		Products: nil,
 	}
 
 	return &merchant, r.DB.InsertMerchant(merchant)
