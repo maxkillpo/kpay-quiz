@@ -43,6 +43,8 @@ func (b *BuyServiceImprement) Product(buy *BuyProductRequest) (*model.Merchant, 
 				return merchant, errors.New("Product amount less than.")
 			}
 
+			merchant.BankAccount.Balance = merchant.BankAccount.Balance + (merchant.Products[index].Price * float64(amountProduct))
+
 			merchant.History = append(merchant.History, model.History{
 				ID:          bson.NewObjectId(),
 				Amount:      amountProduct,

@@ -266,7 +266,8 @@ func (s *Server) BuyProduct(c *gin.Context) {
 	printLog(merchent)
 
 	c.JSON(http.StatusCreated, gin.H{
-		"status": "success",
+		"status":  "success",
+		"message": merchent.BankAccount,
 	})
 }
 
