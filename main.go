@@ -22,6 +22,9 @@ func main() {
 		Buy: &service.BuyServiceImprement{
 			DB: &store.DAOS,
 		},
+		Report: &service.SellReportsServiceImprement{
+			DB: &store.DAOS,
+		},
 	}
 
 	r := router.Setup(s)

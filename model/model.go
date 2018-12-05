@@ -37,5 +37,6 @@ type History struct {
 	ID          bson.ObjectId `bson:"_id" json:"id"`
 	Amount      int           `bson:"amount" json:"amount"`
 	ProductName string        `bson:"product_name" json:"product_name"`
+	TotalPrice  float64       `bson:"total_price" json:"total_price"`
 	Date        string        `bson:"date" json:"date"`
 }

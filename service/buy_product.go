@@ -29,26 +29,22 @@ func (b *BuyServiceImprement) Product(buy *BuyProductRequest) (*model.Merchant, 
 		return merchant, err
 	}
 
-	for i := 0; i > 0; i++ {
-
-	}
-
 	for index, element := range merchant.Products {
 
 		if element.ID == bson.ObjectIdHex(productId) {
-
 			merchant.Products[index].Amount = element.Amount - amountProduct
 
 			if merchant.Products[index].Amount < 0 {
 				return merchant, errors.New("Product amount less than.")
 			}
 
-			merchant.BankAccount.Balance = merchant.BankAccount.Balance + (merchant.Products[index].Price * float64(amountProduct))
-
+			totlePrice := (merchant.Products[index].Price * float64(amountProduct))
+			merchant.BankAccount.Balance = merchant.BankAccount.Balance + totlePrice
 			merchant.History = append(merchant.History, model.History{
 				ID:          bson.NewObjectId(),
 				Amount:      amountProduct,
 				ProductName: element.Name,
+				TotalPrice:  totlePrice,
 				Date:        time.Now().String(),
 			})
 			break

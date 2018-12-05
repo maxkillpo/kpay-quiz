@@ -23,7 +23,7 @@ create an api for merchant seller and selling report.
 ## APIs
 | Name                 | Method | Endpoint                          |
 |----------------------|--------|-----------------------------------|
-| Register Merchant    | POST   | /merchant/register                |
+| Register Merchant    | POST   | /register                |
 | Merchant Information | GET    | /merchant/:id                     |
 | Update Merchant      | POST   | /merchant/:id                     |
 | List All Products    | GET    | /merchant/:id/products            |

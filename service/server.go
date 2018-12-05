@@ -18,6 +18,7 @@ type Server struct {
 	Merchant        MerchantService
 	MerchantProduct MerchantProductService
 	Buy             BuyService
+	Report          SellReportsService
 }
 
 type RegisterJSON struct {
@@ -230,6 +231,20 @@ func (s *Server) SellReports(c *gin.Context) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
+	merchectId := c.Param("id")
+	report, err := s.Report.All(merchectId)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"object":  "error",
+			"message": fmt.Sprintf("json: wrong params: %s", err),
+		})
+		return
+	}
+
+	printLog(report)
+
+	c.JSON(http.StatusCreated, report)
 }
 
 type BuyProductRequest struct {
@@ -267,7 +282,7 @@ func (s *Server) BuyProduct(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{
 		"status":  "success",
-		"message": merchent.BankAccount,
+		"message": "merchent name: " + merchent.Name,
 	})
 }
 

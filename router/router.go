@@ -9,7 +9,7 @@ import (
 /*
 | Name                 | Method | Endpoint                          |
 |----------------------|--------|-----------------------------------|
-| Register Merchant    | POST   | /merchant/register                |
+| Register Merchant    | POST   | /register                         |
 | Merchant Information | GET    | /merchant/:id                     |
 | Update Merchant      | POST   | /merchant/:id                     |
 | List All Products    | GET    | /merchant/:id/products            |
@@ -22,23 +22,25 @@ import (
 
 func Setup(s *service.Server) *gin.Engine {
 	router := gin.Default()
+	setupRouterRegister(s, router)
 	setupRouterMerchant(s, router)
 	setupRouterBuy(s, router)
 	return router
 }
 
+func setupRouterRegister(s *service.Server, g *gin.Engine) {
+	g.POST("/register", s.RegisterMerchant)
+}
+
 func setupRouterMerchant(s *service.Server, g *gin.Engine) {
 	merchant := g.Group("/merchant")
-	merchant.POST("/register", s.RegisterMerchant)
-	merchant.GET("/information/:id", s.MerchantInformation)
-	merchant.POST("/update/:id", s.UpdateMerchant)
-	product := merchant.Group("/product")
-	product.GET("/:id/products", s.ListAllProducts)
-	product.POST("/:id", s.AddProduct)
-	product.POST("/:id/:product_id", s.UpdateProduct)
-	product.DELETE("/:id/:product_id", s.RemoveProduct)
-	report := merchant.Group("/report")
-	report.POST("/:id/report", s.SellReports)
+	merchant.GET("/:id", s.MerchantInformation)
+	merchant.POST("/:id", s.UpdateMerchant)
+	merchant.GET("/:id/products", s.ListAllProducts)
+	merchant.POST("/:id/product", s.AddProduct)
+	merchant.POST("/:id/product/:product_id", s.UpdateProduct)
+	merchant.DELETE("/:id/product/:product_id", s.RemoveProduct)
+	merchant.POST("/:id/report", s.SellReports)
 }
 
 func setupRouterBuy(s *service.Server, g *gin.Engine) {
