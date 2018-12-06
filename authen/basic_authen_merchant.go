@@ -1,4 +1,4 @@
-package service
+package authen
 
 import (
 	"kpay-quiz/store"
@@ -7,14 +7,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Authen struct {
+type Option struct {
 	DB *store.DAO
 }
 
-func (a *Authen) BasicAuthenMerchant(c *gin.Context) {
+func (a *Option) BasicAuthenMerchant(c *gin.Context) {
 
-	username, password, ok := c.Request.BasicAuth()
-	if ok {
+	if username, password, ok := c.Request.BasicAuth(); ok {
 		if username == "" || password == "" {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}

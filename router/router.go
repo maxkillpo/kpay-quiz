@@ -1,6 +1,7 @@
 package router
 
 import (
+	"kpay-quiz/authen"
 	"kpay-quiz/service"
 	"kpay-quiz/store"
 
@@ -23,19 +24,16 @@ import (
 
 func Setup(s *service.Server) *gin.Engine {
 	router := gin.Default()
-	setupRouterRegister(s, router)
-	setupRouterMerchant(s, router)
-	setupRouterBuy(s, router)
 	return router
 }
 
-func setupRouterRegister(s *service.Server, g *gin.Engine) {
+func SetupRouterRegister(s *service.Server, g *gin.Engine) {
 	g.POST("/register", s.RegisterMerchant)
 }
 
-func setupRouterMerchant(s *service.Server, g *gin.Engine) {
-	authen := service.Authen{
-		DB: &store.DAOS,
+func SetupRouterMerchant(s *service.Server, g *gin.Engine, db *store.DAO) {
+	authen := authen.Option{
+		DB: db,
 	}
 	merchant := g.Group("/merchant")
 	merchant.Use(authen.BasicAuthenMerchant)
@@ -48,7 +46,7 @@ func setupRouterMerchant(s *service.Server, g *gin.Engine) {
 	merchant.POST("/:id/report", s.SellReports)
 }
 
-func setupRouterBuy(s *service.Server, g *gin.Engine) {
+func SetupRouterBuy(s *service.Server, g *gin.Engine) {
 	buy := g.Group("/buy")
 	buy.POST("/product", s.BuyProduct)
 }

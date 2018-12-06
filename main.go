@@ -28,5 +28,8 @@ func main() {
 	}
 
 	r := router.Setup(s)
+	router.SetupRouterMerchant(s, r, &store.DAOS)
+	router.SetupRouterRegister(s, r)
+	router.SetupRouterBuy(s, r)
 	r.Run(":" + os.Getenv("PORT"))
 }
