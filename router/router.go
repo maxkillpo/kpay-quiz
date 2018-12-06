@@ -2,6 +2,7 @@ package router
 
 import (
 	"kpay-quiz/service"
+	"kpay-quiz/store"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,7 +34,11 @@ func setupRouterRegister(s *service.Server, g *gin.Engine) {
 }
 
 func setupRouterMerchant(s *service.Server, g *gin.Engine) {
+	authen := service.Authen{
+		DB: &store.DAOS,
+	}
 	merchant := g.Group("/merchant")
+	merchant.Use(authen.BasicAuthenMerchant)
 	merchant.GET("/:id", s.MerchantInformation)
 	merchant.POST("/:id", s.UpdateMerchant)
 	merchant.GET("/:id/products", s.ListAllProducts)

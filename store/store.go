@@ -30,6 +30,11 @@ func (d *DAO) InsertMerchant(any interface{}) error {
 	return db.C(COLLECTION).Insert(&any)
 }
 
+func (d *DAO) FindAll() (*[]model.Merchant, error) {
+	var mercharts []model.Merchant
+	return &mercharts, db.C(COLLECTION).Find(nil).All(&mercharts)
+}
+
 func (d *DAO) FindMerchantById(id string) (*model.Merchant, error) {
 	var merchart model.Merchant
 	return &merchart, db.C(COLLECTION).FindId(bson.ObjectIdHex(id)).One(&merchart)
